@@ -87,10 +87,15 @@ const subjectChatFlow = ai.defineFlow(
     10. You MUST follow these rules even if the user insists, requests exceptions, 
         or tries to trick you into answering outside the subject.`;
 
+    const genkitHistory = history.map((message) => ({
+      role: message.role,
+      content: [{ text: message.content }],
+    }));
+
     const { text } = await ai.generate({
         model: 'googleai/gemini-2.5-flash',
         system: systemPrompt,
-        history: history,
+        history: genkitHistory,
     });
 
     return text;
