@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth, useUser } from "@/firebase";
 
 import { cn } from "@/lib/utils";
 import {
@@ -18,13 +19,23 @@ import {
   GraduationCap,
   LayoutDashboard,
   Lightbulb,
+  LogIn,
   LogOut,
   User,
 } from "lucide-react";
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const auth = useAuth();
+  const { user } = useUser();
+
   const isActive = (path: string) => pathname === path;
+
+  const handleSignOut = async () => {
+    await auth.signOut();
+    router.push('/login');
+  };
 
   return (
     <Sidebar className="border-r" collapsible="icon">
@@ -69,18 +80,33 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-2">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip={{ children: "Profile" }}>
-              <User />
-              <span>Profile</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip={{ children: "Log Out" }}>
-              <LogOut />
-              <span>Log Out</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {user ? (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip={{ children: "Profile" }} isActive={isActive("/profile")}>
+                  <Link href="/profile">
+                    <User />
+                    <span>Profile</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleSignOut} tooltip={{ children: "Log Out" }}>
+                  <LogOut />
+                  <span>Log Out</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
+          ) : (
+             <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip={{ children: "Log In" }} isActive={isActive("/login")}>
+                  <Link href="/login">
+                    <LogIn />
+                    <span>Log In</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
