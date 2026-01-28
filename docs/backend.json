@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user account within the EduLink application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user. (Primary Key)"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The user's first name."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The user's last name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "role": {
+          "type": "string",
+          "description": "The user's role within the application (e.g., student, tutor).",
+          "format": "string"
+        },
+        "profileId": {
+          "type": "string",
+          "description": "Reference to the UserProfile entity. (Relationship: User 1:1 UserProfile)"
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "role",
+        "profileId"
+      ]
+    },
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Stores additional profile information for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user profile. (Primary Key)"
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short biography or description of the user."
+        },
+        "profileImageUrl": {
+          "type": "string",
+          "description": "URL of the user's profile image.",
+          "format": "uri"
+        },
+        "subjects": {
+          "type": "array",
+          "description": "List of subjects the user is interested in or tutors.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availability": {
+          "type": "string",
+          "description": "The user's availability for tutoring sessions."
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user account information. Includes 'role' for authorization.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/user_profiles/{profileId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profile data. Including the user's 'id' in this entity assures Authorization Independence.",
+          "params": [
+            {
+              "name": "profileId",
+              "description": "The unique identifier of the user profile."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support user authentication and profile management for the EduLink application. It prioritizes authorization independence by storing user roles directly within the user document. This avoids the need for complex `get()` calls in security rules, making them more robust and easier to debug. The structure also facilitates secure list operations by segregating user data into private collections owned by each user.\n\nSpecifically:\n\n*   `/users/{userId}`: This collection stores user accounts. The `role` field within each user document enables role-based access control. The `profileId` field establishes a 1:1 relationship with the UserProfile entity.\n*   `/user_profiles/{profileId}`: This collection stores user profile data. Including the user's `id` in this entity assures Authorization Independence.\n\nThis structure promotes clear authorization intent, adheres to DBAC principles (no custom claims), and supports secure list operations (QAPs) through structural segregation."
+  }
+}
