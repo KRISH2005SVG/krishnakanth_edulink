@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -22,6 +23,7 @@ import {
   LogIn,
   LogOut,
   User,
+  Bot,
 } from "lucide-react";
 
 export function AppSidebar() {
@@ -73,6 +75,18 @@ export function AppSidebar() {
               <Link href="/smart-matching">
                 <Lightbulb />
                 <span>Smart Matching</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={isActive("/chatbot")}
+              tooltip={{ children: "Chatbot" }}
+            >
+              <Link href="/chatbot">
+                <Bot />
+                <span>Chatbot</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

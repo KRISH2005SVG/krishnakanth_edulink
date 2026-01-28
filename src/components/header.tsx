@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ const getTitle = (pathname: string): string => {
   if (pathname === "/dashboard") return "Tutor Dashboard";
   if (pathname === "/smart-matching") return "Smart Matching";
   if (pathname === "/profile") return "My Profile";
+  if (pathname === "/chatbot") return "Tutor Chatbot";
   return "EduLink";
 };
 
