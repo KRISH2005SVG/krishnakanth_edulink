@@ -92,10 +92,20 @@ const subjectChatFlow = ai.defineFlow(
       content: [{ text: message.content }],
     }));
 
+    // The Gemini API requires that the 'history' array starts with a 'user' message.
+    // The client-side implementation might send a history starting with a 'model'
+    // message (the bot's initial greeting). We find the first 'user'
+    // message and start the history from there to ensure correctness.
+    const firstUserMessageIndex = genkitHistory.findIndex(m => m.role === 'user');
+    const validHistoryForGemini = firstUserMessageIndex !== -1
+      ? genkitHistory.slice(firstUserMessageIndex)
+      : [];
+
+
     const response = await ai.generate({
         model: 'googleai/gemini-2.5-flash',
         system: systemPrompt,
-        history: genkitHistory,
+        history: validHistoryForGemini,
     });
 
     return response.text;
