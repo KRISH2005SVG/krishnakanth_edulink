@@ -92,12 +92,12 @@ const subjectChatFlow = ai.defineFlow(
       content: [{ text: message.content }],
     }));
 
-    const { text } = await ai.generate({
+    const response = await ai.generate({
         model: 'googleai/gemini-2.5-flash',
         system: systemPrompt,
         history: genkitHistory,
     });
 
-    return text;
+    return response.text;
   }
 );
