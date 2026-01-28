@@ -79,20 +79,20 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-         <div className="text-center mb-6">
+         <div className="text-center mb-8">
             <Link href="/" className="flex items-center justify-center gap-2 text-primary mb-4">
-                <GraduationCap className="w-8 h-8 text-primary" />
-                <span className="font-bold text-2xl">
+                <GraduationCap className="w-10 h-10 text-primary" />
+                <span className="font-bold text-4xl text-foreground">
                     EduLink
                 </span>
             </Link>
-            <h1 className="text-2xl font-bold font-headline">Welcome Back</h1>
-            <p className="text-muted-foreground">Sign in to access your dashboard.</p>
+            <h1 className="text-3xl font-bold font-headline">Welcome Back!</h1>
+            <p className="text-muted-foreground">Sign in to continue your learning journey.</p>
         </div>
-        <Card className="shadow-lg">
+        <Card className="shadow-2xl">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
-            <CardDescription>Enter your credentials to continue.</CardDescription>
+            <CardDescription>Enter your credentials to access your account.</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -131,7 +131,7 @@ export default function LoginPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isLoading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                   {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <LogIn className="mr-2 h-4 w-4" />}
                   Sign In
                 </Button>
@@ -141,7 +141,7 @@ export default function LoginPage() {
         </Card>
         <p className="text-center text-sm text-muted-foreground mt-6">
           Don't have an account?{" "}
-          <Link href="/signup" className="text-primary hover:underline">
+          <Link href="/signup" className="text-primary font-semibold hover:underline">
             Sign Up
           </Link>
         </p>

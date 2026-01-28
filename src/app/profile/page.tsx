@@ -2,9 +2,10 @@
 
 import { useUser, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { doc, DocumentData } from "firebase/firestore";
-import { Loader2, User } from "lucide-react";
+import { Loader2, User, Mail, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function ProfilePage() {
     const { user, isUserLoading } = useUser();
@@ -42,23 +43,31 @@ export default function ProfilePage() {
         <div className="container mx-auto py-8">
             <div className="max-w-2xl mx-auto">
                 <div className="text-center mb-10">
-                    <User className="mx-auto h-12 w-12 text-accent" />
-                    <h1 className="text-3xl font-bold mt-4 font-headline">My Profile</h1>
-                    <p className="mt-2 text-muted-foreground">View and manage your account details.</p>
+                    <User className="mx-auto h-12 w-12 text-primary" />
+                    <h1 className="text-4xl font-bold mt-4 font-headline">My Profile</h1>
+                    <p className="mt-2 text-muted-foreground text-lg">View and manage your account details.</p>
                 </div>
-                <Card className="shadow-lg">
-                    <CardHeader className="items-center text-center">
-                         <Avatar className="h-24 w-24 mb-4">
+                <Card className="shadow-xl">
+                    <CardHeader className="items-center text-center p-6 bg-muted/30">
+                         <Avatar className="h-28 w-28 mb-4 border-4 border-primary">
                             <AvatarImage src={user.photoURL ?? ""} alt={userData.firstName} />
-                            <AvatarFallback className="text-3xl">
+                            <AvatarFallback className="text-4xl">
                                 {getInitials(`${userData.firstName} ${userData.lastName}`)}
                             </AvatarFallback>
                         </Avatar>
-                        <CardTitle className="text-2xl">{userData.firstName} {userData.lastName}</CardTitle>
+                        <CardTitle className="text-3xl">{userData.firstName} {userData.lastName}</CardTitle>
+                        <CardDescription className="text-base">Student</CardDescription>
                     </CardHeader>
-                    <CardContent className="text-center">
-                        <p className="text-muted-foreground">{userData.email}</p>
-                        <p className="text-sm text-green-500 font-semibold mt-2 capitalize">{userData.role}</p>
+                    <CardContent className="p-6 space-y-4">
+                        <div className="flex items-center gap-4">
+                            <Mail className="h-5 w-5 text-muted-foreground" />
+                            <span className="text-muted-foreground">{userData.email}</span>
+                        </div>
+                        <Separator />
+                        <div className="flex items-center gap-4">
+                            <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+                            <span className="text-muted-foreground capitalize">Role: {userData.role}</span>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

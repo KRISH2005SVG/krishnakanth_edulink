@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { addDays, format } from "date-fns";
-import { Calendar as CalendarIcon, Clock } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -47,7 +47,7 @@ export function SessionBooking({ tutor }: { tutor: Tutor }) {
     }
 
     toast({
-      title: "Session Booked!",
+      title: "Session Booked! 🎉",
       description: `Your session with ${
         tutor.name
       } is confirmed for ${format(date, "PPP")} at ${selectedTime}.`,
@@ -59,23 +59,24 @@ export function SessionBooking({ tutor }: { tutor: Tutor }) {
   };
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle>Book a Session</CardTitle>
+    <Card className="shadow-2xl">
+      <CardHeader className="text-center">
         <CardDescription>
-          Starting from{" "}
-          <span className="font-bold text-primary">${tutor.pricePerHour}/hr</span>
+          Starting from
         </CardDescription>
+        <CardTitle className="text-3xl">
+          <span className="font-bold text-primary">${tutor.pricePerHour}</span><span className="text-lg font-normal text-muted-foreground">/hr</span>
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <h3 className="font-medium">Select a Date</h3>
+          <h3 className="font-semibold text-center">Select a Date</h3>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-full justify-start text-left font-normal",
+                  "w-full justify-start text-left font-normal h-12 text-base",
                   !date && "text-muted-foreground"
                 )}
               >
@@ -98,14 +99,14 @@ export function SessionBooking({ tutor }: { tutor: Tutor }) {
         </div>
         {date && (
           <div className="space-y-2">
-            <h3 className="font-medium">Select a Time</h3>
+            <h3 className="font-semibold text-center">Select a Time</h3>
             <div className="grid grid-cols-2 gap-2">
               {timeSlots.map((time) => (
                 <Button
                   key={time}
                   variant={selectedTime === time ? "default" : "outline"}
                   onClick={() => setSelectedTime(time)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 h-12 text-base"
                 >
                   <Clock className="w-4 h-4" />
                   {time}
@@ -118,10 +119,10 @@ export function SessionBooking({ tutor }: { tutor: Tutor }) {
       <CardFooter>
         <Button
           onClick={handleBooking}
-          className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+          className="w-full bg-accent text-accent-foreground hover:bg-accent/90 h-12 text-lg"
           disabled={!date || !selectedTime}
         >
-          Book Session
+          Book Session <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </CardFooter>
     </Card>

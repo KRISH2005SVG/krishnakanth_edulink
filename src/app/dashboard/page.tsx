@@ -38,20 +38,20 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="space-y-4">
-        <h2 className="text-3xl font-bold tracking-tight font-headline">Find Your Perfect Tutor</h2>
-        <p className="text-muted-foreground max-w-2xl">
+      <div className="space-y-2 text-center">
+        <h1 className="text-4xl font-bold tracking-tight font-headline text-primary">Find Your Perfect Tutor</h1>
+        <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
           Search our network of qualified tutors to find the right one for your needs. Filter by subject, availability, and more.
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg bg-card shadow-sm">
         <div className="relative md:col-span-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search by name or keyword..."
-            className="pl-10 h-11"
+            className="pl-10 h-11 bg-background"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -60,7 +60,7 @@ export default function DashboardPage() {
           value={subjectFilter}
           onValueChange={(value) => setSubjectFilter(value as Subject | 'all')}
         >
-          <SelectTrigger className="h-11">
+          <SelectTrigger className="h-11 bg-background">
             <SelectValue placeholder="Filter by subject" />
           </SelectTrigger>
           <SelectContent>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
           value={availabilityFilter}
           onValueChange={(value) => setAvailabilityFilter(value)}
         >
-          <SelectTrigger className="h-11">
+          <SelectTrigger className="h-11 bg-background">
             <SelectValue placeholder="Filter by availability" />
           </SelectTrigger>
           <SelectContent>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 border-2 border-dashed rounded-lg">
+        <div className="text-center py-16 border-2 border-dashed rounded-lg bg-card">
           <h3 className="text-xl font-semibold">No Tutors Found</h3>
           <p className="text-muted-foreground mt-2">Try adjusting your search or filter criteria.</p>
         </div>

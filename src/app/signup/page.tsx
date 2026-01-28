@@ -120,17 +120,17 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
             <Link href="/" className="flex items-center justify-center gap-2 text-primary mb-4">
-                <GraduationCap className="w-8 h-8 text-primary" />
-                <span className="font-bold text-2xl">
+                <GraduationCap className="w-10 h-10 text-primary" />
+                <span className="font-bold text-4xl text-foreground">
                     EduLink
                 </span>
             </Link>
-            <h1 className="text-2xl font-bold font-headline">Create an Account</h1>
+            <h1 className="text-3xl font-bold font-headline">Create your Account</h1>
             <p className="text-muted-foreground">Join our community of learners and educators.</p>
         </div>
-        <Card className="shadow-lg">
+        <Card className="shadow-2xl">
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
             <CardDescription>Fill in your details to get started.</CardDescription>
@@ -200,7 +200,7 @@ export default function SignupPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isLoading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                   {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
                   Create Account
                 </Button>
@@ -210,7 +210,7 @@ export default function SignupPage() {
         </Card>
          <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary hover:underline">
+          <Link href="/login" className="text-primary font-semibold hover:underline">
             Sign In
           </Link>
         </p>

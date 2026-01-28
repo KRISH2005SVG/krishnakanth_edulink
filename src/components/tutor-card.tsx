@@ -37,7 +37,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
   const placeholderImage = PlaceHolderImages.find(img => img.id === tutor.avatarId);
   
   return (
-    <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-lg">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
             {placeholderImage && (
@@ -55,15 +55,15 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
       <CardContent className="p-4 flex-grow">
         <div className="flex items-center justify-between mb-2">
             <StarRating rating={tutor.rating} />
-            <Badge variant="secondary">{tutor.availability}</Badge>
+            <Badge variant="secondary" className="capitalize">{tutor.availability}</Badge>
         </div>
         <h3 className="text-lg font-bold font-headline">{tutor.name}</h3>
-        <p className="text-sm text-muted-foreground">{tutor.headline}</p>
+        <p className="text-sm text-muted-foreground h-10">{tutor.headline}</p>
         <div className="mt-4 flex flex-wrap gap-2">
             {tutor.subjects.slice(0, 2).map(s => <Badge key={s} variant="outline">{s}</Badge>)}
         </div>
       </CardContent>
-      <CardFooter className="p-4 bg-muted/50 flex items-center justify-between">
+      <CardFooter className="p-4 bg-muted/30 flex items-center justify-between">
         <div className="flex items-center gap-1">
             <DollarSign className="w-5 h-5 text-primary" />
             <span className="text-lg font-bold text-primary">{tutor.pricePerHour}</span>
