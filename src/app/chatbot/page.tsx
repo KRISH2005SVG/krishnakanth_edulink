@@ -19,7 +19,7 @@ export default function ChatbotPage() {
   React.useEffect(() => {
     // Set the initial message from the chatbot directly on the client.
     // This is more efficient and avoids a potentially problematic initial API call.
-    setMessages([{ role: "model", content: "Which subject do you want to chat with me?" }]);
+    setMessages([{ role: "model", content: "Hello! I'm your AI Tutor. How can I help you with your studies today?" }]);
     setIsLoading(false);
   }, []);
   
@@ -60,12 +60,12 @@ export default function ChatbotPage() {
     <div className="flex flex-col h-full max-h-[calc(100vh-8rem)]">
        <div className="mb-4">
           <h1 className="text-3xl font-bold font-headline">Tutor Chatbot</h1>
-          <p className="text-muted-foreground">Your personal AI tutor, ready to help you with any subject.</p>
+          <p className="text-muted-foreground">Your personal AI tutor, ready to help with your academic questions.</p>
         </div>
       <Card className="flex flex-col flex-grow shadow-lg">
         <CardHeader className="flex-shrink-0">
           <CardTitle className="flex items-center gap-2"><Bot /> AI Tutor</CardTitle>
-          <CardDescription>Ask me anything about your selected subject.</CardDescription>
+          <CardDescription>Ask me anything about your school subjects.</CardDescription>
         </CardHeader>
         <CardContent className="flex-grow flex flex-col p-0">
           <ScrollArea className="flex-grow p-6" ref={scrollAreaRef}>
