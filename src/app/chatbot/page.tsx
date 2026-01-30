@@ -17,19 +17,10 @@ export default function ChatbotPage() {
   const scrollAreaRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    // Initial message from chatbot
-    async function getInitialMessage() {
-      try {
-        const response = await getChatbotResponse({ history: [] });
-        setMessages([{ role: "model", content: response }]);
-      } catch (error) {
-        console.error(error);
-        setMessages([{ role: "model", content: "Sorry, I'm having trouble starting up. Please try again later." }]);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    getInitialMessage();
+    // Set the initial message from the chatbot directly on the client.
+    // This is more efficient and avoids a potentially problematic initial API call.
+    setMessages([{ role: "model", content: "Which subject do you want to chat with me?" }]);
+    setIsLoading(false);
   }, []);
   
   React.useEffect(() => {
