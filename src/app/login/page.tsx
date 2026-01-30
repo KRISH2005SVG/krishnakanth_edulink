@@ -17,11 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/firebase";
-import { initiateEmailSignIn } from "@/firebase/non-blocking-login";
+import { useAuth, useUser } from "@/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/firebase";
 import { GraduationCap } from "lucide-react";
 
 const formSchema = z.object({
@@ -56,13 +55,17 @@ export default function LoginPage() {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
     try {
-      initiateEmailSignIn(auth, data.email, data.password);
-      // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      // The onAuthStateChanged listener in FirebaseProvider will handle the redirect.
     } catch (error: any) {
+      let description = "Failed to sign in. Please try again later.";
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          description = "Invalid email or password. Please check your credentials and try again.";
+      }
       toast({
         variant: "destructive",
-        title: "An Error Occurred",
-        description: error.message || "Failed to sign in. Please try again later.",
+        title: "Sign In Failed",
+        description: description,
       });
       setIsLoading(false);
     }

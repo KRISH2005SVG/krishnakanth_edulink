@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore, useUser } from "@/firebase";
-import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { doc } from "firebase/firestore";
@@ -37,9 +37,6 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isCreatingProfile, setIsCreatingProfile] = React.useState(false);
-  const [formData, setFormData] = React.useState<Omit<FormData, 'password'> | null>(null);
-
   const { toast } = useToast();
   const auth = useAuth();
   const firestore = useFirestore();
@@ -58,54 +55,61 @@ export default function SignupPage() {
 
   React.useEffect(() => {
     if (user && !isUserLoading) {
-      if (isCreatingProfile && formData) {
-        const userId = user.uid;
-        const userRef = doc(firestore, "users", userId);
-        const profileRef = doc(firestore, "user_profiles", userId);
-
-        const userData = {
-          id: userId,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: user.email,
-          role: "student",
-          profileId: userId,
-        };
-
-        const userProfileData = {
-          id: userId,
-          bio: "",
-          profileImageUrl: "",
-          subjects: [],
-          availability: "",
-        };
-        
-        setDocumentNonBlocking(userRef, userData, { merge: true });
-        setDocumentNonBlocking(profileRef, userProfileData, { merge: true });
-        
-        setIsCreatingProfile(false);
         router.replace('/dashboard');
-
-      } else if (!isCreatingProfile) {
-        router.replace('/dashboard');
-      }
     }
-  }, [user, isUserLoading, router, isCreatingProfile, firestore, formData]);
+  }, [user, isUserLoading, router]);
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
-    setFormData({ firstName: data.firstName, lastName: data.lastName, email: data.email });
-    setIsCreatingProfile(true);
     try {
-      initiateEmailSignUp(auth, data.email, data.password);
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const newUser = userCredential.user;
+
+      // Update user profile with name
+      await updateProfile(newUser, {
+          displayName: `${data.firstName} ${data.lastName}`
+      });
+
+      // Create user documents in Firestore
+      const userId = newUser.uid;
+      const userRef = doc(firestore, "users", userId);
+      const profileRef = doc(firestore, "user_profiles", userId);
+
+      const userData = {
+        id: userId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: newUser.email,
+        role: "student",
+        profileId: userId,
+      };
+
+      const userProfileData = {
+        id: userId,
+        bio: "",
+        profileImageUrl: "",
+        subjects: [],
+        availability: "",
+      };
+      
+      setDocumentNonBlocking(userRef, userData, { merge: true });
+      setDocumentNonBlocking(profileRef, userProfileData, { merge: true });
+      
+      // The onAuthStateChanged listener will redirect to the dashboard
+
     } catch (error: any) {
+      let description = "Failed to create an account. Please try again later.";
+      if (error.code === 'auth/email-already-in-use') {
+          description = "This email is already in use. Please use a different email or sign in.";
+      } else if (error.code === 'auth/weak-password') {
+          description = "The password is too weak. Please use a stronger password.";
+      }
       toast({
         variant: "destructive",
-        title: "An Error Occurred",
-        description: error.message || "Failed to sign up. Please try again later.",
+        title: "Sign Up Failed",
+        description: description,
       });
       setIsLoading(false);
-      setIsCreatingProfile(false);
     }
   }
 
